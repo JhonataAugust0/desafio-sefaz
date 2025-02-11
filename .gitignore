@@ -1,0 +1,84 @@
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/auth.json
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+# Diretórios do Laravel
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+/storage/oauth-private.key
+/storage/oauth-public.key
+/storage/framework/*
+/storage/logs/*
+/bootstrap/cache/*
+
+# Arquivos do Laravel
+.env
+.env.*
+.phpunit.result.cache
+Homestead.yaml
+Homestead.json
+Vagrantfile
+
+# Arquivos do Composer
+composer.phar
+
+# Arquivos do NPM/Yarn
+package-lock.json
+yarn.lock
+
+# Diretórios do Vue
+/dist
+/.nuxt
+/.output
+
+# IDEs e Sistemas Operacionais
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+*.swn
+.idea/
+.vscode/
+
+# Arquivos de cache do PHP
+*.phpunit.result.cache
+
+# Arquivos do npm e Yarn
+.pnpm-store/
+.npm/
+.yarn/
+
+# Arquivos de build e deploy
+/public/hot
+/public/mix-manifest.json
+/public/css
+/public/js
+/public/mix-manifest.json
+/public/build
+
+# Docker
+.dockerignore
+.env.docker
