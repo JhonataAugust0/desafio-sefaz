@@ -29,7 +29,7 @@ const handleLogout = () => {
           <template v-if="authStore.isAuthenticated">
             <Link :href="route('login')">
                 <p class="text-xl font-bold text-primary">
-                    Sair
+                    Logout
                 </p>
             </Link>
           </template>

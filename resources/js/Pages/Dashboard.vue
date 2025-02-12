@@ -128,7 +128,7 @@ const closeModal = () => {
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.sector }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.email }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <button @click="openEditModal(employee)" class="text-blue-600 hover:text-blue-900 mr-2">
+                            <button @click="openEditModal(employee)" class="text-secondary hover:text-blue-950 mr-2">
                                 Editar
                             </button>
                             <button @click="openDeleteModal(employee)" class="text-red-600 hover:text-red-900">

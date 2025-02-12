@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useAuthStore } from '@/stores/auth';
 
 defineProps({
     canResetPassword: {
@@ -16,6 +17,8 @@ defineProps({
     },
 });
 
+const authStore = useAuthStore();
+
 const form = useForm({
     email: '',
     password: '',
@@ -23,6 +26,7 @@ const form = useForm({
 });
 
 const submit = () => {
+    authStore.isAuthenticated = true;
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
     });
