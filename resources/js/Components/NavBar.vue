@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { useAuthStore } from '../stores/auth'
-import { useRouter } from 'vue-router'
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Link } from '@inertiajs/vue3';
 
 const authStore = useAuthStore()
-const router = useRouter()
 
 const handleLogout = () => {
   authStore.logout()
-  router.push('/login')
 }
 </script>
 

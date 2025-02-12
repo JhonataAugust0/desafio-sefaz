@@ -1,23 +1,33 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import NavBar from '@/Components/NavBar.vue';
 import { usePage, Head, useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useEmployeesStore } from '@/stores/employees'
+import NavBar from '@/Components/NavBar.vue';
 
-const employeesStore = useEmployeesStore()
-const searchQuery = ref('')
-const showAddModal = ref(false)
-const editingEmployee = ref(null)
-const showDeleteModal = ref(false)
-const showEditModal = ref(false)
-const employeeToEdit = ref(null)
-const employeeToDelete = ref(null)
-
-const user = usePage().props.auth.user;
 const props = defineProps({
-  employees: Array,
-  sectors: Array
+    employees: {
+        type: Array,
+        default: () => []
+    },
+    sectors: {
+        type: Array,
+        default: () => []
+    }
+});
+
+const employeesStore = useEmployeesStore();
+const searchQuery = ref('');
+const showAddModal = ref(false);
+const showDeleteModal = ref(false);
+const showEditModal = ref(false);
+const employeeToEdit = ref(null);
+const employeeToDelete = ref(null);
+
+onMounted(() => {
+    employeesStore.$patch({
+        employees: props.employees,
+        sectors: props.sectors
+    });
 });
 
 const form = useForm({
@@ -27,69 +37,92 @@ const form = useForm({
     password: ''
 });
 
-const handleSubmit = () => {
-    form.post(route('employee.store'), {
-        onSuccess: () => {
-            closeModal();
-            form.reset();
-            employeesStore.fetchEmployees();
-        },
-    });
-}
-
-const filteredEmployees = computed(() => {
-  return employeesStore.employees.filter(emp =>
-    emp.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    emp.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    emp.sector.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
-
-
-const openDeleteModal = (employee) => {
-  employeeToDelete.value = employee
-  showDeleteModal.value = true
-}
-
-const openEditModal = (employee) => {
-  editingEmployee.value = employee;
-  form.name = employee.name;
-  form.email = employee.email;
-  form.sector = employee.sector;
-  showEditModal.value = true;
-}
-
-
-const confirmDelete = () => {
-  if (employeeToDelete.value) {
-    employeesStore.deleteEmployee(employeeToDelete.value.id)
-    showDeleteModal.value = false
-    employeeToDelete.value = null
-  }
-}
-
-const confirmEdit = () => {
-  if (editingEmployee.value) {
-    employeesStore.updateEmployee(editingEmployee.value.id, {
-      name: form.name,
-      email: form.email,
-      sector: form.sector,
-    });
-    showEditModal.value = false;
-    editingEmployee.value = null;
-    form.reset();
-  }
-}
-
-const closeModal = () => {
-  showAddModal.value = false
-  editingEmployee.value = null
-  form.value = {
+const editForm = useForm({
+    id: '',
     name: '',
     email: '',
     sector: ''
-  }
-}
+});
+
+const deleteForm = useForm({id: ''});
+
+const filteredEmployees = computed(() => {
+    return employeesStore.employees.filter(emp =>
+        emp.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        emp.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        emp.sector.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+});
+
+const handleSubmit = () => {
+    form.post(route('employee.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            closeModal();
+            form.reset();
+            employeesStore.$patch({
+                employees: usePage().props.employees
+            });
+        },
+    });
+};
+
+const openDeleteModal = (employee) => {
+    deleteForm.id = employee.id;
+    employeeToDelete.value = employee;
+    showDeleteModal.value = true;
+};
+
+const openEditModal = (employee) => {
+    employeeToEdit.value = employee;
+    editForm.id = employee.id;
+    editForm.name = employee.name;
+    editForm.email = employee.email;
+    editForm.sector = employee.sector;
+    showEditModal.value = true;
+};
+
+const confirmDelete = () => {
+    console.log(employeeToDelete.value.id);
+    if (employeeToDelete.value) {
+        deleteForm.delete(route('employee.destroy', { id: employeeToDelete.value.id }), {
+            preserveScroll: true,
+            onSuccess: () => {
+                showDeleteModal.value = false;
+                employeeToDelete.value = null;
+                employeesStore.$patch({
+                    employees: usePage().props.employees
+                });
+            },
+        });
+    }
+};
+
+const confirmEdit = () => {
+    if (employeeToEdit.value) {
+        editForm.patch(route('employee.update'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                showEditModal.value = false;
+                employeeToEdit.value = null;
+                editForm.reset();
+                employeesStore.$patch({
+                    employees: usePage().props.employees
+                });
+            },
+        });
+    }
+};
+
+const closeModal = () => {
+    showAddModal.value = false;
+    showEditModal.value = false;
+    showDeleteModal.value = false;
+    employeeToEdit.value = null;
+    employeeToDelete.value = null;
+    form.reset();
+    editForm.reset();
+};
 </script>
 
 <template>
@@ -191,32 +224,32 @@ const closeModal = () => {
                 <form @submit.prevent="confirmEdit" class="space-y-4">
                     <div>
                         <label class="form-label">Nome</label>
-                        <input type="text" v-model="form.name" class="input-field w-full" required />
-                        <div v-if="form.errors.name" class="text-red-500 text-sm">{{ form.errors.name }}</div>
+                        <input type="text" v-model="editForm.name" class="input-field w-full" required />
+                        <div v-if="editForm.errors.name" class="text-red-500 text-sm">{{ editForm.errors.name }}</div>
                     </div>
 
                     <div>
                         <label class="form-label">Email</label>
-                        <input type="email" v-model="form.email" class="input-field w-full" required />
-                        <div v-if="form.errors.email" class="text-red-500 text-sm">{{ form.errors.email }}</div>
+                        <input type="email" v-model="editForm.email" class="input-field w-full" required />
+                        <div v-if="editForm.errors.email" class="text-red-500 text-sm">{{ editForm.errors.email }}</div>
                     </div>
 
                     <div>
                         <label class="form-label">Setor</label>
-                        <select v-model="form.sector" class="input-field w-full" required>
+                        <select v-model="editForm.sector" class="input-field w-full" required>
                             <option value="">Selecione um setor</option>
                             <option v-for="sector in employeesStore.sectors" :key="sector" :value="sector">
                                 {{ sector }}
                             </option>
                         </select>
-                        <div v-if="form.errors.sector" class="text-red-500 text-sm">{{ form.errors.sector }}</div>
+                        <div v-if="editForm.errors.sector" class="text-red-500 text-sm">{{ editForm.errors.sector }}</div>
                     </div>
 
                     <div class="flex justify-end space-x-2 mt-6">
                         <button type="button" @click="closeModal" class="btn-secondary">
                             Cancelar
                         </button>
-                        <button type="submit" class="btn-primary" :disabled="form.processing">
+                        <button type="submit" class="btn-primary" :disabled="editForm.processing">
                             Salvar
                         </button>
                     </div>

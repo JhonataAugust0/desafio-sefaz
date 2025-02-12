@@ -17,11 +17,6 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function get()
-    {
-        $users = User::where('role', 'user')->get();
-        return response()->json($users, 200);;
-    }
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -39,9 +34,8 @@ class EmployeeController extends Controller
             'role' => 'user',
         ]);
 
-        return redirect()->back()->with('success', 'Funcionário cadastrado com sucesso');
+        return redirect()->back()->with('message', 'Funcionário cadastrado com sucesso');
     }
-
 
     public function update(Request $request)
     {
@@ -53,16 +47,13 @@ class EmployeeController extends Controller
         ]);
 
         $user = User::findOrFail($validated['id']);
-
-        $updateData = [
+        $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'sector' => $validated['sector'],
-        ];
+        ]);
 
-        $user->update($updateData);
-
-        return redirect()->back()->with('success', 'Funcionário atualizado com sucesso');
+        return redirect()->back()->with('message', 'Funcionário atualizado com sucesso');
     }
 
     public function destroy(Request $request)
@@ -74,6 +65,6 @@ class EmployeeController extends Controller
         $user = User::findOrFail($validated['id']);
         $user->delete();
 
-        return redirect()->back()->with('success', 'Funcionário deletado com sucesso');
+        return redirect()->back()->with('message', 'Funcionário excluído com sucesso');
     }
 }
