@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import NavBar from '@/Components/NavBar.vue';
+import ActivityCards from '@/Components/ActivityCards.vue'
 
 </script>
 
@@ -23,6 +24,7 @@ import NavBar from '@/Components/NavBar.vue';
             Acessar sistema
         </PrimaryButton>
       </Link>
+      <ActivityCards />
     </div>
   </div>
 </template>
