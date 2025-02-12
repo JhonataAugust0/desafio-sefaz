@@ -33,9 +33,8 @@ class EmployeeController extends Controller
             'name'     => 'required|string|max:100',
             'email'    => 'required|string|email|max:100|unique:users',
             'sector'   => 'required|string|max:30',
-            'password' => 'required|string|min:8',
         ]);
-
+        $validatedData['password'] = bcrypt('stringst1');
         $this->employeeService->createEmployee($validatedData);
 
         return redirect()->back()->with('message', 'Funcionário cadastrado com sucesso');

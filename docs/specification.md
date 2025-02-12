@@ -100,7 +100,7 @@ O projeto "Maceió IN" tem como objetivo desenvolver um site simples e minimalis
 
 1. **Autenticação e Controle de Acesso**  
    - Implementar sistema de login para acesso restrito às funcionalidades administrativas.
-   - Restringir operações de criação, edição e exclusão de cadastros apenas a usuários autenticados.
+   - Restringir operações de criação, edição e exclusão de cadastros apenas a usuários e com role de admin.
 
 2. **Landing Page**  
    - Exibir uma página inicial com uma breve descrição sobre a Secretaria de Fazenda de Maceió.
@@ -112,7 +112,7 @@ O projeto "Maceió IN" tem como objetivo desenvolver um site simples e minimalis
      - Validação de campos (ex.: formato do e-mail).
    - **Leitura:**  
      - Exibição de uma tabela com os dados cadastrados.
-     - Funcionalidade de pesquisa e ordenação (opcional, para melhoria de usabilidade).
+     - Funcionalidade de pesquisa e ordenação.
    - **Atualização:**  
      - Permitir a edição dos dados de um cadastro existente.
      - Atualizar as informações no banco de dados de forma segura.
@@ -138,10 +138,6 @@ O projeto "Maceió IN" tem como objetivo desenvolver um site simples e minimalis
      | Cinza | Fundo	##FFFFFF |	Background |
 
    - Manter consistência visual em todas as páginas do site.
-
-7. **Configuração e Inicialização do Projeto**  
-   - Estruturar o projeto de forma que a aplicação possa ser iniciada localmente com um único comando.
-   - Incluir instruções claras de instalação e configuração no repositório do GitHub.
 
 ---
 

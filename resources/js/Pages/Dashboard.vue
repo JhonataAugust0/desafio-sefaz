@@ -34,7 +34,6 @@ const form = useForm({
     name: '',
     email: '',
     sector: '',
-    password: ''
 });
 
 const editForm = useForm({
@@ -198,12 +197,6 @@ const closeModal = () => {
                             </option>
                         </select>
                         <div v-if="form.errors.sector" class="text-red-500 text-sm">{{ form.errors.sector }}</div>
-                    </div>
-
-                    <div>
-                        <label class="form-label">Senha</label>
-                        <input type="password" v-model="form.password" class="input-field w-full" required />
-                        <div v-if="form.errors.password" class="text-red-500 text-sm">{{ form.errors.password }}</div>
                     </div>
 
                     <div class="flex justify-end space-x-2 mt-6">
