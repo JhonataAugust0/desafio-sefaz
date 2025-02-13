@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import NavBar from '@/Components/NavBar.vue';
 import ActivityCards from '@/Components/ActivityCards.vue'
 
@@ -18,11 +17,9 @@ import ActivityCards from '@/Components/ActivityCards.vue'
       </p>
 
       <Link :href="route('login')">
-        <PrimaryButton
-            class="{ 'opacity-25': form.processing }"
-            :dclass="ms-4">
+        <button class="btn-primary text-lg">
             Acessar sistema
-        </PrimaryButton>
+        </button>
       </Link>
       <ActivityCards />
     </div>
