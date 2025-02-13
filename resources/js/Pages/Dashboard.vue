@@ -22,6 +22,8 @@ const showDeleteModal = ref(false);
 const showEditModal = ref(false);
 const employeeToEdit = ref(null);
 const employeeToDelete = ref(null);
+const currentPage = ref(1);
+const pageSize = ref(10);
 
 onMounted(() => {
     employeesStore.$patch({
@@ -30,28 +32,43 @@ onMounted(() => {
     });
 });
 
+const user = computed(() => usePage().props.auth?.user || {});
+const isAdmin = computed(() => user.value.role === 'admin');
+
 const form = useForm({
     name: '',
     email: '',
     sector: '',
+    role: '',
 });
 
 const editForm = useForm({
     id: '',
     name: '',
     email: '',
-    sector: ''
+    sector: '',
+    role: '',
 });
 
 const deleteForm = useForm({id: ''});
 
 const filteredEmployees = computed(() => {
     return employeesStore.employees.filter(emp =>
-        emp.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        emp.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        emp.sector.toLowerCase().includes(searchQuery.value.toLowerCase())
+        (emp.name ? emp.name.toLowerCase() : '').includes(searchQuery.value.toLowerCase()) ||
+        (emp.email ? emp.email.toLowerCase() : '').includes(searchQuery.value.toLowerCase()) ||
+        (emp.sector ? emp.sector.toLowerCase() : '').includes(searchQuery.value.toLowerCase())
     );
 });
+
+const totalPages = computed(() => {
+    return Math.ceil(filteredEmployees.value.length / pageSize.value);
+});
+
+const paginatedEmployees = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    return filteredEmployees.value.slice(start, start + pageSize.value);
+});
+
 
 const handleSubmit = () => {
     form.post(route('employee.store'), {
@@ -78,6 +95,11 @@ const openEditModal = (employee) => {
     editForm.name = employee.name;
     editForm.email = employee.email;
     editForm.sector = employee.sector;
+
+    if (isAdmin.value && employee.role) {
+        editForm.role = employee.role;
+    }
+
     showEditModal.value = true;
 };
 
@@ -148,6 +170,7 @@ const closeModal = () => {
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posição</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Setor</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -155,7 +178,8 @@ const closeModal = () => {
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="employee in filteredEmployees" :key="employee.id">
+                    <tr v-for="(employee, index) in paginatedEmployees" :key="employee.id" class="hover:bg-gray-100">
+                        <td class="px-6 py-4">{{ ((currentPage - 1) * pageSize) + index + 1 }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.sector }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.email }}</td>
@@ -170,6 +194,24 @@ const closeModal = () => {
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="flex justify-between items-center mt-4">
+            <button
+                :disabled="currentPage <= 1"
+                @click="currentPage--"
+                class="btn-secondary"
+            >
+                Anterior
+            </button>
+            <span>Página {{ currentPage }} de {{ totalPages }}</span>
+            <button
+                :disabled="currentPage >= totalPages"
+                @click="currentPage++"
+                class="btn-secondary"
+            >
+                Próxima
+            </button>
         </div>
 
         <div v-if="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -197,6 +239,14 @@ const closeModal = () => {
                             </option>
                         </select>
                         <div v-if="form.errors.sector" class="text-red-500 text-sm">{{ form.errors.sector }}</div>
+                    </div>
+
+                    <div v-if="isAdmin">
+                        <label>Nível de acesso</label>
+                        <select v-model="form.role" class="input-field w-full">
+                            <option value="user">Usuário</option>
+                            <option value="admin">Administrador</option>
+                        </select>
                     </div>
 
                     <div class="flex justify-end space-x-2 mt-6">
@@ -236,6 +286,14 @@ const closeModal = () => {
                             </option>
                         </select>
                         <div v-if="editForm.errors.sector" class="text-red-500 text-sm">{{ editForm.errors.sector }}</div>
+                    </div>
+
+                    <div v-if="isAdmin">
+                        <label>Nível de acesso</label>
+                        <select v-model="editForm.role" class="input-field w-full">
+                            <option value="user">Usuário</option>
+                            <option value="admin">Administrador</option>
+                        </select>
                     </div>
 
                     <div class="flex justify-end space-x-2 mt-6">

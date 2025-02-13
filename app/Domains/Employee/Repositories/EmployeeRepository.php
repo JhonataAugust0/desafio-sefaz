@@ -9,7 +9,7 @@ class EmployeeRepository implements IEmployeeRepository
 {
     public function getAll()
     {
-        return User::where('role', 'user')->select(['id', 'name', 'email', 'sector'])->get();
+        return User::whereIn('role', ['admin', 'user'])->select(['id', 'name', 'email', 'sector', 'role'])->get();
     }
 
     public function create(array $data)

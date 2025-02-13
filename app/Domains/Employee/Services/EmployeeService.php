@@ -22,7 +22,6 @@ class EmployeeService implements IEmployeeService
 
     public function createEmployee(array $data)
     {
-        $data['role'] = 'user';
         $data['password'] = Hash::make($data['password']);
         return $this->employeeRepository->create($data);
     }

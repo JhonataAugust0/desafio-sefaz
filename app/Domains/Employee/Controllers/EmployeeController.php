@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Domains\Employee\Interfaces\IEmployeeService;
+use Illuminate\Support\Facades\Auth;
+
 
 class EmployeeController extends Controller
 {
@@ -29,12 +31,19 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name'     => 'required|string|max:100',
-            'email'    => 'required|string|email|max:100|unique:users',
-            'sector'   => 'required|string|max:30',
-        ]);
+        $rules = [
+            'name'   => 'required|string|max:100',
+            'email'  => 'required|string|email|max:100|unique:users,email',
+            'sector' => 'required|string|max:30',
+        ];
+
+        if (Auth::user()->role === 'admin') {
+            $rules['role'] = 'required|string|in:admin,user';
+        }
+
+        $validatedData = $request->validate($rules);
         $validatedData['password'] = bcrypt('stringst1');
+
         $this->employeeService->createEmployee($validatedData);
 
         return redirect()->back()->with('message', 'Funcionário cadastrado com sucesso');
@@ -42,12 +51,18 @@ class EmployeeController extends Controller
 
     public function update(Request $request)
     {
-        $validatedData = $request->validate([
+        $rules = [
             'id'     => 'required|exists:users,id',
             'name'   => 'required|string|max:100',
             'email'  => 'required|string|email|max:100|unique:users,email,' . $request->id,
             'sector' => 'required|string|max:30',
-        ]);
+        ];
+
+        if (Auth::user()->role === 'admin') {
+            $rules['role'] = 'required|string|in:admin,user';
+        }
+
+        $validatedData = $request->validate($rules);
 
         $this->employeeService->updateEmployee($validatedData);
 
