@@ -42,7 +42,7 @@ class EmployeeController extends Controller
         }
 
         $validatedData = $request->validate($rules);
-        $validatedData['password'] = bcrypt('stringst1');
+        $validatedData['password'] = 'stringst1';
 
         $this->employeeService->createEmployee($validatedData);
 

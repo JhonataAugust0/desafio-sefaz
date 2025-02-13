@@ -7,7 +7,7 @@ import ActivityCards from '@/Components/ActivityCards.vue'
 
 <template>
     <NavBar />
-    <div class="min-h-[calc(100vh-4rem)] bg-cover bg-center flex items-center" style="background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://www.maceio.al.gov.br/wp-content/uploads/2021/01/maceio-alagoas.jpg')">
+    <div class="min-h-[calc(100vh-4rem)] bg-cover bg-center flex items-center" style="background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9))">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h1 class="text-4xl font-bold text-primary mb-6">
         Secretaria Municipal da Fazenda de Maceió
