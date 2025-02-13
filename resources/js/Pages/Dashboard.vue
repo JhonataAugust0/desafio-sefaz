@@ -99,7 +99,7 @@ const openEditModal = (employee) => {
     if (isAdmin.value && employee.role) {
         editForm.role = employee.role;
     }
-
+    console.log(isAdmin.value)
     showEditModal.value = true;
 };
 
@@ -174,7 +174,7 @@ const closeModal = () => {
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Setor</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                        <th v-if="isAdmin" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -183,7 +183,7 @@ const closeModal = () => {
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.sector }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ employee.email }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap">
                             <button @click="openEditModal(employee)" class="text-secondary hover:text-blue-950 mr-2">
                                 Editar
                             </button>
