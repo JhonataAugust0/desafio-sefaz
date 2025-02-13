@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DefineComponent } from 'vue';
+
 const activities = [
   {
     icon: '💰',

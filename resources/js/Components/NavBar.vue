@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { useAuthStore } from '../stores/auth'
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 
 const authStore = useAuthStore()
 
 const handleLogout = () => {
-  authStore.logout()
+  router.post(route('logout'), {}, {
+    onSuccess: () => {
+      authStore.logout()
+    }
+  })
 }
 </script>
 
@@ -23,11 +27,9 @@ const handleLogout = () => {
         </div>
         <div class="flex items-center">
           <template v-if="authStore.isAuthenticated">
-            <Link :href="route('login')">
-                <p class="text-xl font-bold text-primary">
-                    Logout
-                </p>
-            </Link>
+            <button @click="handleLogout" class="text-xl font-bold text-primary">
+                Logout
+            </button>
           </template>
 
           <template v-else>

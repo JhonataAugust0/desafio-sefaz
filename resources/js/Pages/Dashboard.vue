@@ -99,12 +99,10 @@ const openEditModal = (employee) => {
     if (isAdmin.value && employee.role) {
         editForm.role = employee.role;
     }
-    console.log(isAdmin.value)
     showEditModal.value = true;
 };
 
 const confirmDelete = () => {
-    console.log(employeeToDelete.value.id);
     if (employeeToDelete.value) {
         deleteForm.delete(route('employee.destroy', { id: employeeToDelete.value.id }), {
             preserveScroll: true,
