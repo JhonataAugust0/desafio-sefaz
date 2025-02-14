@@ -2,7 +2,8 @@
 import { usePage, Head, useForm } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue'
 import { useEmployeesStore } from '@/stores/employees'
-import NavBar from '@/Components/NavBar.vue';
+import NavBar from '@/Layouts/NavBar.vue';
+import Footer from '@/Layouts/Footer.vue';
 
 const props = defineProps({
     employees: {
@@ -322,4 +323,5 @@ const closeModal = () => {
             </div>
         </div>
     </div>
+    <Footer />
 </template>

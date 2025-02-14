@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import NavBar from '@/Components/NavBar.vue';
+import NavBar from '@/Layouts/NavBar.vue';
 import ActivityCards from '@/Components/ActivityCards.vue'
+import Footer from '@/Layouts/Footer.vue';
 
 </script>
 
@@ -24,4 +25,5 @@ import ActivityCards from '@/Components/ActivityCards.vue'
       <ActivityCards />
     </div>
   </div>
+  <Footer />
 </template>
