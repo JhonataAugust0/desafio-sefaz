@@ -1,66 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Maceió IN
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Projeto desenvolvido para o desafio de estágio na Secretaria da Fazenda de Maceió. Trata-se de um site simples e minimalista, construído em Laravel e Vue.js, que oferece uma landing page institucional e um sistema de gerenciamento de cadastros com funcionalidades CRUD.
 
-## About Laravel
+Para mais detalhes sobre os requisitos e especificações técnicas do projeto, consulte a [especificação do projeto](docs/specification.md).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Funcionalidades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Autenticação:** Acesso seguro ao painel administrativo.
+- **Landing Page:** Página inicial com descrição institucional da Secretaria.
+- **Gerenciamento de Cadastros:** CRUD para pessoas com campos de nome, setor (Contabilidade, Financeiro, Atendimento, Orçamento e TI) e e-mail.
+- **Design Responsivo:** Interface alinhada à identidade visual de maceio.al.gov.br.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Requisitos
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP 8.x
+- Composer
+- Node.js e NPM/Yarn (para dependências do front-end)
+- Docker e Docker Compose (opcional)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Configuração do Ambiente
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **Variáveis de Ambiente:**  
+   Renomeie o arquivo `.env.example` para `.env` e ajuste as variáveis referentes ao banco de dados (DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD).
 
-### Premium Partners
+2. **Instalação das Dependências:**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+   - **PHP:**
+     ```bash
+     composer install
+     ```
+   - **Front-end:**
+     ```bash
+     npm install
+     ```
 
-## Contributing
+3. **Gerar a Chave da Aplicação:**
+   ```bash
+   php artisan key:generate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. **Executar as Migrations:**
+   ```bash
+   php artisan migrate
+   ```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Executando o Projeto
 
-## Security Vulnerabilities
+### 1. Localmente (PHP)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Inicie o servidor de desenvolvimento:
+  ```bash
+  php artisan serve
+  ```
+  ou
+  ```bash
+  composer run dev
+  ```
+- Acesse o projeto via [http://localhost:8000](http://localhost:8000).
 
-## License
+### 2. Com Docker
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Suba os containers utilizando o Laravel Sail:
+  ```bash
+  ./vendor/bin/sail up
+  ```
+- O projeto estará acessível em [http://localhost](http://localhost) (ou na porta configurada).
+
+---
+
+## Restaurando o Banco de Dados
+
+### Pelo Docker
+
+1. **Copiar o Dump para o Container:**
+   ```bash
+   docker cp database_dump.sql desafio_sefaz-pgsql-1:/database_dump.sql
+   ```
+2. **Restaurar o Banco de Dados:**
+   ```bash
+   docker exec -i desafio_sefaz-pgsql-1 psql -U postgres -d template1 < database_dump.sql
+   ```
+
+### Sem Docker
+
+1. **Ajuste as Variáveis de Ambiente:**  
+   Certifique-se de que as variáveis do banco no arquivo `.env` estão configuradas corretamente para o ambiente local (host=127.0.0.1).
+
+2. **Restaurar Utilizando o Cliente PostgreSQL:**
+   ```bash
+   psql -U <seu_usuario> -d <seu_banco> -f database_dump.sql
+   ```
+   Substitua `<seu_usuario>` e `<seu_banco>` pelas informações do seu ambiente.
+
+---
+
+## Observações
+
+- Garanta que o serviço de banco de dados esteja ativo, seja via Docker ou localmente.
+- Caso opte pelo ambiente Docker, certifique-se de que todos os containers (incluindo o do PostgreSQL) estejam em execução.
+- Mantenha sempre as variáveis de ambiente atualizadas para evitar problemas de conexão com o banco de dados.
+
+---
+
